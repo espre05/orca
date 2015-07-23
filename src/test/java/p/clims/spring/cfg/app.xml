@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+	xmlns:jaxrs-client="http://cxf.apache.org/jaxrs-client" 
+	xmlns:jaxws="http://cxf.apache.org/jaxws"
+	xmlns:util="http://www.springframework.org/schema/util"
+
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd 
+	http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd 
+	http://cxf.apache.org/jaxrs-client http://cxf.apache.org/schemas/jaxrs-client.xsd">
+
+	<!-- these are included in the dependency jar -->
+	<import resource="classpath:META-INF/cxf/cxf.xml" />
+	<import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+	<aop:aspectj-autoproxy />
+
+	<task:annotation-driven />
+
+	<context:component-scan base-package="p.clims.services.*" />
+
+	<!-- rest container -->
+	<jaxrs-client:client id="clarityService" address="http://clims02:8080"
+		serviceClass="p.clims.service.ClarityService" inheritHeaders="true"
+		username="apiuser" password="apipassword">
+		<jaxrs-client:headers>
+			<entry key="Accept" value="text/xml" />
+		</jaxrs-client:headers>
+		<!--jaxrs:providers> <bean class="org.codehaus.jackson.jaxrs.JacksonJsonProvider" 
+			/> <bean class="com.luckyryan.sample.exception.ExceptionHandler" /> </jaxrs:providers -->
+	</jaxrs-client:client>
+</beans>
