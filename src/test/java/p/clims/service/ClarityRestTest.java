@@ -37,16 +37,12 @@ import com.genologics.ri.sample.Sample;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:p/clims/spring/cfg/app.xml")
 public class ClarityRestTest {
-  private final static String userName = "apiuser", password = "apipassword";
-  // private final static String userName = "pnatarajan", password = "clims123";
   private static Logger logger = LoggerFactory.getLogger(ClarityRestTest.class);
-  private final static String CLARITY_ENDPOINT_ADDRESS = "http://clims02:8080";
-  public static final String ENCODING_UTF_8 = "UTF-8";
 
 
-  // private ClarityService restService = JAXRSClientFactory.create(CLARITY_ENDPOINT_ADDRESS, ClarityService.class, userName, password, null);
+
   @Autowired
-  private ClarityService restService;// = JAXRSClientFactory.create(CLARITY_ENDPOINT_ADDRESS, ClarityService.class, userName, password, null);
+  private ClarityService restService;
 
   @Test
   public void clarity_create_project() throws IOException {
@@ -56,7 +52,7 @@ public class ClarityRestTest {
 
     Project retriveNewProject = restService.createProject(projNewElement);
     logger.info("Create Proj:" + projNew.toString());
-    logger.info("Created Proj:" + retriveNewProject.toString());
+    logger.info("Created Proj \u2122:" + retriveNewProject.toString());
   }
 
   @Test
@@ -145,16 +141,20 @@ public class ClarityRestTest {
 
   @Test
   public void clarity_get_projects_reqres() throws IOException {
+    String userName = "apiuser", password = "apipassword";
+    String CLARITY_ENDPOINT_ADDRESS = "http://clims02:8080";
     Client client = ClientBuilder.newClient();
     client.register(new BasicAuthenticator(userName, password));
     WebTarget webTarget = client.target(CLARITY_ENDPOINT_ADDRESS + "/api/v2/projects");
-    // Response response = webTarget.request("application/xml").get();
-    // String responseStr = getResponseAsStr(response);
-    Projects Projects = webTarget.request("application/xml").get(Projects.class);
-    System.out.println(Projects);
+    Projects projects = webTarget.request("application/xml").get(Projects.class);
+    System.out.println("\u2122" + projects);
+    Response response = webTarget.request("application/xml").get();
+    String responseStr = getResponseAsStr(response);
+    logger.info("Projects xml:" + responseStr);
   }
 
   private String getResponseAsStr(Response response) throws IOException {
+    String ENCODING_UTF_8 = "UTF-8";
     InputStream instream = (InputStream) response.getEntity();
     String responseStr = new Scanner(instream, ENCODING_UTF_8).useDelimiter("\\A").next();
     instream.close();
